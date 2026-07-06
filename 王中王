@@ -6,13 +6,23 @@
   "files": [
     {
       "path": "package.json",
-      "content": "{\n  \"name\": \"portfolio\",\n  \"version\": \"1.0.0\",\n  \"description\": \"李栋 - 视觉传达设计作品集 | Li Dong - Visual Communication Design Portfolio\",\n  \"private\": true,\n  \"scripts\": {\n    \"dev\": \"next dev\",\n    \"build\": \"next build && next export\",\n    \"start\": \"next start\",\n    \"lint\": \"next lint\"\n  },\n  \"dependencies\": {\n    \"react\": \"^18.2.0\",\n    \"react-dom\": \"^18.2.0\",\n    \"next\": \"^14.0.0\"\n  },\n  \"devDependencies\": {\n    \"tailwindcss\": \"^3.3.0\",\n    \"postcss\": \"^8.4.31\",\n    \"autoprefixer\": \"^10.4.16\"\n  }\n}\n"
+      "content": "{\n  \"name\": \"portfolio\",\n  \"version\": \"1.0.0\",\n  \"description\": \"李栋 - 视觉传达设计作品集 | Li Dong - Visual Communication Design Portfolio\",\n  \"private\": true,\n  \"scripts\": {\n    \"dev\": \"next dev\",\n    \"build\": \"next build \",\n    \"start\": \"next start\",\n    \"lint\": \"next lint\"\n  },\n  \"dependencies\": {\n    \"react\": \"^18.2.0\",\n    \"react-dom\": \"^18.2.0\",\n    \"next\": \"^14.0.0\"\n  },\n  \"devDependencies\": {\n    \"tailwindcss\": \"^3.3.0\",\n    \"postcss\": \"^8.4.31\",\n    \"autoprefixer\": \"^10.4.16\"\n  }\n}\n"
     },
     {
       "path": "next.config.js",
-      "content": "/** @type {import('next').NextConfig} */\nconst nextConfig = {\n  images: {\n    unoptimized: true,\n  },\n  reactStrictMode: true,\n  trailingSlash: true,\n};\n\nmodule.exports = nextConfig;\n"
-    },
-    {
+      /** @type {import('next').NextConfig} */
+const nextConfig = {
+  output: 'export',
+  images: {
+    unoptimized: true,
+  },
+  reactStrictMode: true,
+  trailingSlash: true,
+  basePath: '/portfolio',
+  assetPrefix: '/portfolio/',
+};
+
+module.exports = nextConfig;
       "path": "tailwind.config.js",
       "content": "/** @type {import('tailwindcss').Config} */\nmodule.exports = {\n  content: [\n    './pages/**/*.{js,ts,jsx,tsx}',\n    './components/**/*.{js,ts,jsx,tsx}',\n  ],\n  theme: {\n    extend: {\n      colors: {\n        'dark-bg': '#0a0e27',\n        'dark-light': '#1a1f3a',\n        'accent-yellow': '#FFD700',\n        'accent-pink': '#FF1493',\n        'accent-green': '#00FF41',\n        'accent-cyan': '#00D9FF',\n      },\n    },\n  },\n  plugins: [],\n};\n"
     },
@@ -74,9 +84,39 @@
     },
     {
       "path": ".github/workflows/deploy.yml",
-      "content": "name: Deploy to GitHub Pages\n\non:\n  push:\n    branches: [main]\n  pull_request:\n    branches: [main]\n\njobs:\n  deploy:\n    runs-on: ubuntu-latest\n\n    strategy:\n      matrix:\n        node-version: [18.x]\n\n    steps:\n      - uses: actions/checkout@v3\n\n      - name: Use Node.js ${{ matrix.node-version }}\n        uses: actions/setup-node@v3\n        with:\n          node-version: ${{ matrix.node-version }}\n          cache: 'npm'\n\n      - name: Install dependencies\n        run: npm ci\n\n      - name: Build\n        run: npm run build\n\n      - name: Deploy to GitHub Pages\n        uses: peaceiris/actions-gh-pages@v3\n        with:\n          github_token: ${{ secrets.GITHUB_TOKEN }}\n          publish_dir: ./out\n"
-    },
-    {
+      "content": name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./out
       "path": "README.md",
       "content": "# 李栋的作品集网站 | Li Dong's Portfolio Website\n\n一个现代化、极简艺术风格的个人作品集网站。\n\nA modern, minimalist art-style personal portfolio website.\n\n## 🎨 设计特点 | Design Features\n\n- ✨ **撞色艺术风格** - 黄、粉、绿撞色配色方案\n- 🎬 **流畅动画** - 平滑交互效果\n- 📱 **完全响应式** - 支持所有设备尺寸\n- 🌙 **深色主题** - 专业的暗色背景设计\n- 🖱️ **鼠标跟随** - 创意互动效果\n- 📊 **滚动进度条** - 视觉反馈\n\n## 🛠️ 技术栈 | Tech Stack\n\n- **框架**: Next.js 14\n- **样式**: Tailwind CSS\n- **动画**: 原生 CSS Animation\n- **部署**: GitHub Pages / Vercel\n\n## 📋 项目结构 | Project Structure\n\n```\nportfolio/\n├── pages/\n│   ├── _app.js           # App 包装器\n│   ├── _document.js      # HTML 文档结构\n│   └── index.js          # 主页面\n├── components/\n│   ├── Header.js         # 导航栏\n│   ├── Hero.js           # 首屏\n│   ├── About.js          # 关于版块\n│   ├── Works.js          # 作品展示\n│   ├── Contact.js        # 联系方式\n│   ├── Footer.js         # 底部\n│   └── ScrollProgress.js # 滚动进度条\n├── styles/\n│   ├── globals.css       # 全局样式\n│   └── animations.css    # 动画定义\n└── public/               # 静态资源\n```\n\n## 🚀 快速开始 | Quick Start\n\n### 安装依赖 | Install Dependencies\n\n```bash\nnpm install\n```\n\n### 本地开发 | Development\n\n```bash\nnpm run dev\n# 访问 http://localhost:3000\n```\n\n### 生产构建 | Production Build\n\n```bash\nnpm run build\n```\n\n## 📝 自定义内容 | Customize Content\n\n### 修改个人信息\n\n编辑 `components/About.js`：\n```javascript\n// 修改姓名、生日等信息\n<p>姓名：李栋</p>\n<p>出生日期：2004.02.04</p>\n```\n\n### 添加作品\n\n编辑 `components/Works.js` 中的 `works` 数组：\n```javascript\nconst works = [\n  { id: 1, category: 'graphic', title: '项目名称', desc: '项目描述' },\n  // ...\n];\n```\n\n### 修改配色\n\n编辑 `tailwind.config.js`：\n```javascript\ncolors: {\n  'accent-yellow': '#FFD700',\n  'accent-pink': '#FF1493',\n  'accent-green': '#00FF41',\n}\n```\n\n## 📸 更新个人照片 | Update Personal Photo\n\n1. 将照片放在 `public/images/` 目录\n2. 在 `components/About.js` 中修改图片路径\n\n```javascript\n<img\n  src=\"/images/your-photo.jpg\"\n  alt=\"李栋\"\n  className=\"...\"\n/>\n```\n\n## 📱 响应式设计 | Responsive Design\n\n- 📱 Mobile (< 640px)\n- 📱 Tablet (640px - 1024px)\n- 💻 Desktop (> 1024px)\n\n## 🌐 部署 | Deployment\n\n项目已配置自动部署到 GitHub Pages。\n\n访问地址：`https://LI794955.github.io/portfolio/`\n\n## 📧 联系信息 | Contact\n\n- 📞 电话: 15523957239\n- 💬 QQ: 1303212579\n- 📧 邮箱: 1303212579@qq.com\n\n## 📄 许可证 | License\n\nMIT License - 自由使用和修改\n\n---\n\n**最后更新 | Last Updated**: 2024\n\n**快乐设计！| Happy Designing! 🎨**\n"
     }
