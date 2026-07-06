@@ -6,6 +6,8 @@ const nextConfig = {
   },
   reactStrictMode: true,
   trailingSlash: true,
+  basePath: '/DD',
+  assetPrefix: '/DD/',
 };
 
 module.exports = nextConfig;
